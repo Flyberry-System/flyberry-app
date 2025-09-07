@@ -1,0 +1,3 @@
+/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/QtButtonsApp.dir
+/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/edit_cache.dir
+/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/rebuild_cache.dir

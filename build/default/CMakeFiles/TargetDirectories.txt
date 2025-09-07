@@ -1,0 +1,9 @@
+/home/markus/flyberry-app/build/default/CMakeFiles/QtButtonsApp.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/edit_cache.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/rebuild_cache.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/list_install_components.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/install.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/install/local.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/install/strip.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/QtButtonsApp_autogen_timestamp_deps.dir
+/home/markus/flyberry-app/build/default/CMakeFiles/QtButtonsApp_autogen.dir

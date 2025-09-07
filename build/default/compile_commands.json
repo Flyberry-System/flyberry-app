@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/QtButtonsApp_autogen/mocs_compilation.cpp.o -c /home/markus/flyberry-app/build/default/QtButtonsApp_autogen/mocs_compilation.cpp",
+  "file": "/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/mocs_compilation.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/QtButtonsApp_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/main.cpp.o -c /home/markus/flyberry-app/main.cpp",
+  "file": "/home/markus/flyberry-app/main.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/main.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/networkMenu.cpp.o -c /home/markus/flyberry-app/networkMenu.cpp",
+  "file": "/home/markus/flyberry-app/networkMenu.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/networkMenu.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/menuButton.cpp.o -c /home/markus/flyberry-app/menuButton.cpp",
+  "file": "/home/markus/flyberry-app/menuButton.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/menuButton.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/settingsMenu.cpp.o -c /home/markus/flyberry-app/settingsMenu.cpp",
+  "file": "/home/markus/flyberry-app/settingsMenu.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/settingsMenu.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/systemMenu.cpp.o -c /home/markus/flyberry-app/systemMenu.cpp",
+  "file": "/home/markus/flyberry-app/systemMenu.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/systemMenu.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/EnterEventFilter.cpp.o -c /home/markus/flyberry-app/EnterEventFilter.cpp",
+  "file": "/home/markus/flyberry-app/EnterEventFilter.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/EnterEventFilter.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/statusBar.cpp.o -c /home/markus/flyberry-app/statusBar.cpp",
+  "file": "/home/markus/flyberry-app/statusBar.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/statusBar.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/mainMenu.cpp.o -c /home/markus/flyberry-app/mainMenu.cpp",
+  "file": "/home/markus/flyberry-app/mainMenu.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/mainMenu.cpp.o"
+},
+{
+  "directory": "/home/markus/flyberry-app/build/default",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_TRANSLATIONS_DIR=\\\"/home/markus/flyberry-app/languages\\\" -DQT_WIDGETS_LIB -I/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include -isystem /usr/local/qt6/include/QtWidgets -isystem /usr/local/qt6/include -isystem /usr/local/qt6/include/QtCore -isystem /usr/local/qt6/mkspecs/linux-g++ -isystem /usr/local/qt6/include/QtGui -isystem /usr/local/qt6/include/QtSvg -std=gnu++17 -fPIC -o CMakeFiles/QtButtonsApp.dir/languageHelper.cpp.o -c /home/markus/flyberry-app/languageHelper.cpp",
+  "file": "/home/markus/flyberry-app/languageHelper.cpp",
+  "output": "CMakeFiles/QtButtonsApp.dir/languageHelper.cpp.o"
+}
+]

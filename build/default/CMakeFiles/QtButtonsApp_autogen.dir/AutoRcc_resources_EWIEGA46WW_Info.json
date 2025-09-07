@@ -1,0 +1,24 @@
+{
+	"BUILD_DIR" : "/home/markus/flyberry-app/build/default/QtButtonsApp_autogen",
+	"CMAKE_BINARY_DIR" : "/home/markus/flyberry-app/build/default",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/markus/flyberry-app/build/default",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/markus/flyberry-app",
+	"CMAKE_SOURCE_DIR" : "/home/markus/flyberry-app",
+	"GENERATOR" : "Unix Makefiles",
+	"INCLUDE_DIR" : "/home/markus/flyberry-app/build/default/QtButtonsApp_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/markus/flyberry-app/icons/wifi.svg",
+		"/home/markus/flyberry-app/icons/battery.svg"
+	],
+	"LOCK_FILE" : "/home/markus/flyberry-app/build/default/CMakeFiles/QtButtonsApp_autogen.dir/AutoRcc_resources_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "/usr/local/qt6/libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/markus/flyberry-app/build/default/CMakeFiles/QtButtonsApp_autogen.dir/AutoRcc_resources_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/home/markus/flyberry-app/resources.qrc",
+	"VERBOSITY" : 0
+}
