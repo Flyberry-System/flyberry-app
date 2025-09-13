@@ -23,7 +23,7 @@ qt_add_translation(QM_FILES ${TS_FILES})
 
 
 # Executable zuerst definieren
-add_executable(QtButtonsApp
+add_executable(FlyberryApp
     main.cpp
     networkMenu.cpp
     menuButton.cpp
@@ -37,7 +37,7 @@ add_executable(QtButtonsApp
 
 # Linken
 target_link_libraries(
-	QtButtonsApp PRIVATE 
+	FlyberryApp PRIVATE 
 	
 	Qt${QT_VERSION_MAJOR}::Widgets 
 	Qt${QT_VERSION_MAJOR}::Svg 
@@ -52,8 +52,21 @@ set(QT_TRANSLATIONS_DIR "/home/markus/flyberry-app/languages")
 add_definitions(-DQT_TRANSLATIONS_DIR="${QT_TRANSLATIONS_DIR}")
 
 # --- Installation (optional) ---
-install(TARGETS QtButtonsApp DESTINATION bin)
-install(FILES ${QM_FILES} DESTINATION translations)
+install(TARGETS FlyberryApp DESTINATION bin)
+# QM_FILES enthält die erzeugten .qm-Dateien (liegen im Build-Verzeichnis!)
+# Beim Installieren richtig ablegen:
+install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/flyberry/translations)
+
+
+# QM-Dateien in Build-Verzeichnis
+foreach(qm ${QM_FILES})
+    add_custom_command(
+        TARGET FlyberryApp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${qm}
+                ${CMAKE_BINARY_DIR}
+    )
+endforeach()
 
 
 

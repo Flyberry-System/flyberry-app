@@ -1,10 +1,6 @@
 // MainMenu.cpp
 #include "mainMenu.h"
-#include "menuButton.h"
-#include <QProcess>
-#include <QVBoxLayout>
 
-#include "languageHelper.h"
 
 MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent)
     : QWidget(parent), stack(stack_), systemMenu(systemMenu_)
@@ -13,10 +9,10 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
     layout->setSpacing(5);
     layout->setContentsMargins(5,5,5,5);
 
-    btnXCSoar = createMenuButton(tr("Starte XCSoar"));
-    btnSystem = createMenuButton(tr("System"), true);
-    btnShell = createMenuButton(tr("Shell"));
-    btnReboot = createMenuButton(tr("Neustart"));
+    btnXCSoar   = createMenuButton(tr("Starte XCSoar"));
+    btnSystem   = createMenuButton(tr("System"), true);
+    btnShell    = createMenuButton(tr("Shell"));
+    btnReboot   = createMenuButton(tr("Neustart"));
     btnShutdown = createMenuButton(tr("Ausschalten"));
 
     layout->addWidget(btnXCSoar);
@@ -33,6 +29,18 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
 
     QObject::connect(btnSystem, &QPushButton::clicked, [=]() {
         stack->setCurrentWidget(systemMenu);
+    });
+
+    QObject::connect(btnShell, &QPushButton::clicked, [=]() {
+        qApp->quit();
+    });
+
+    QObject::connect(btnReboot, &QPushButton::clicked, []() {
+        QProcess::startDetached("reboot");
+    });
+
+    QObject::connect(btnShutdown, &QPushButton::clicked, []() {
+        QProcess::startDetached("poweroff");
     });
 
     // Language update
