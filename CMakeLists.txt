@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(QtButtonsApp LANGUAGES CXX)
+project(FlyberryApp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -52,21 +52,9 @@ set(QT_TRANSLATIONS_DIR "/home/markus/flyberry-app/languages")
 add_definitions(-DQT_TRANSLATIONS_DIR="${QT_TRANSLATIONS_DIR}")
 
 # --- Installation (optional) ---
+
 install(TARGETS FlyberryApp DESTINATION bin)
-# QM_FILES enthält die erzeugten .qm-Dateien (liegen im Build-Verzeichnis!)
-# Beim Installieren richtig ablegen:
-install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/flyberry/translations)
-
-
-# QM-Dateien in Build-Verzeichnis
-foreach(qm ${QM_FILES})
-    add_custom_command(
-        TARGET FlyberryApp POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${qm}
-                ${CMAKE_BINARY_DIR}
-    )
-endforeach()
+install(FILES ${QM_FILES} DESTINATION translations)
 
 
 

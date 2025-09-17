@@ -3,6 +3,11 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QApplication>
+#include "menuButton.h"
+#include <QProcess>
+#include <QVBoxLayout>
+#include "languageHelper.h"
 
 class MainMenu : public QWidget {
     Q_OBJECT
