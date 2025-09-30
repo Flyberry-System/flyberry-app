@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     QWidget window;
     window.setWindowTitle(QObject::tr("Flyberry Menü"));
     window.setStyleSheet("background-color: #3B4252;");
+    window.showFullScreen();
 
     QVBoxLayout *windowLayout = new QVBoxLayout(&window);
     windowLayout->setContentsMargins(0,0,0,0);
