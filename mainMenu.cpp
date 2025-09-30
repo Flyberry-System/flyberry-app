@@ -24,13 +24,7 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
 
     // Aktionen
     QObject::connect(btnXCSoar, &QPushButton::clicked, [=]() {
-        QString program = "/bin/sh";
-        QStringList arguments;
-        arguments << "-c" << "/usr/bin/xcsoar -fly > /home/markus/xcsoar.log 2>&1";
-
-        if (!QProcess::startDetached(program, arguments)) {
-            qWarning() << "Konnte XCSoar nicht detached starten!";
-        }
+        QProcess::startDetached("/usr/bin/xcsoar", QStringList() << "-fly" << "-fullscreen");
     });
 
     QObject::connect(btnSystem, &QPushButton::clicked, [=]() {
