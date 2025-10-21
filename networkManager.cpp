@@ -7,7 +7,7 @@
 NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {}
 
 /**
- * WLANs scannen – funktioniert auf Raspberry Pi mit wpa_supplicant/iwlist
+ * WLANs scannen – funktioniert auf Raspberry Pi mit 'iw'
  */
 void NetworkManager::scanNetworks()
 {
@@ -19,18 +19,19 @@ void NetworkManager::scanNetworks()
         proc->deleteLater();
     });
 
-    proc->start("sh", QStringList() << "-c" << "iwlist wlan0 scan 2>/dev/null | grep 'ESSID'");
+    // iwlist ist veraltet – nutze 'iw'
+    proc->start("sh", QStringList() << "-c" << "iw wlan0 scan | grep 'SSID:'");
 }
 
 /**
- * iwlist-Ausgabe nach SSIDs durchsuchen
+ * iw-Ausgabe nach SSIDs durchsuchen
  */
 QStringList NetworkManager::parseIwlistOutput(const QString &output)
 {
     QStringList lines = output.split('\n', Qt::SkipEmptyParts);
     QStringList ssids;
 
-    QRegularExpression re("ESSID:\"(.*)\"");
+    QRegularExpression re("SSID:\\s*(.*)");
     for (const QString &line : lines) {
         QRegularExpressionMatch match = re.match(line);
         if (match.hasMatch()) {
@@ -44,15 +45,13 @@ QStringList NetworkManager::parseIwlistOutput(const QString &output)
 }
 
 /**
- * Verbindung konfigurieren:
- * - Bestehende wpa_supplicant.conf in /data anpassen
- * - wpa_supplicant Dienst neu starten
+ * Verbindung konfigurieren und herstellen
  */
 void NetworkManager::connectToNetwork(const QString &ssid, const QString &password)
 {
     emit logMessage("Verbinde mit Netzwerk: " + ssid);
 
-    QString confPath = "/data/wpa_supplicant.conf";
+    QString confPath = "/data/wpa_supplicant/wpa_supplicant-wlan0.conf";
     QFile file(confPath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         emit connectionStatus("Fehler: Kann /data/wpa_supplicant.conf nicht schreiben", false);
@@ -78,13 +77,15 @@ void NetworkManager::connectToNetwork(const QString &ssid, const QString &passwo
         emit connectionStatus(msg, success);
 
         if (success) {
-            // IP über DHCP holen
             QProcess::execute("dhclient wlan0");
         }
 
         proc->deleteLater();
     });
 
-    // Versuche, über systemd den Dienst neu zu starten (empfohlen)
-    proc->start("sh", QStringList() << "-c" << "systemctl restart wpa_supplicant || (killall wpa_supplicant; wpa_supplicant -B -i wlan0 -c /data/wpa_supplicant.conf)");
+    // Versuche über systemd neu zu starten, sonst manuell
+    proc->start("sh", QStringList() << "-c" <<
+        "systemctl restart wpa_supplicant || "
+        "(killall wpa_supplicant; "
+        "wpa_supplicant -B -i wlan0 -c /data/wpa_supplicant/wpa_supplicant-wlan0.conf)");
 }
