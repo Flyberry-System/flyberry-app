@@ -5,15 +5,30 @@
 MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent)
     : QWidget(parent), stack(stack_), systemMenu(systemMenu_)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+	// --- Scale-Faktor automatisch ermitteln ---
+	QScreen *screen = QGuiApplication::primaryScreen();
+	qreal dpi = screen ? screen->logicalDotsPerInch() : 96.0;
+	qreal scaleFactor = dpi / 96.0;  // 96 DPI = Standard
+	if (scaleFactor < 1.0) scaleFactor =  1.0; // Minimum
+
+	QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(5);
-    layout->setContentsMargins(5,5,5,5);
+    layout->setContentsMargins(15,15,15,15);
 
     btnXCSoar   = createMenuButton(tr("Starte XCSoar"));
     btnSystem   = createMenuButton(tr("System"), true);
     btnShell    = createMenuButton(tr("Shell"));
     btnReboot   = createMenuButton(tr("Neustart"));
     btnShutdown = createMenuButton(tr("Ausschalten"));
+
+    QList<QPushButton*> buttons = {btnXCSoar, btnSystem, btnShell, btnReboot, btnShutdown};
+
+       for (auto *btn : buttons) {
+           btn->setMinimumHeight(60 * scaleFactor); // Höhe proportional
+           QFont f = btn->font();
+           f.setPointSizeF(f.pointSizeF() * scaleFactor); // Schrift skalieren
+           btn->setFont(f);
+       }
 
     layout->addWidget(btnXCSoar);
     layout->addWidget(btnSystem);
@@ -32,7 +47,7 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
     });
 
     QObject::connect(btnShell, &QPushButton::clicked, [=]() {
-        qApp->quit();
+        QProcess::startDetached("/usr/bin/matchbox-terminal");
     });
 
     QObject::connect(btnReboot, &QPushButton::clicked, []() {

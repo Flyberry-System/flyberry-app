@@ -2,6 +2,7 @@
 #include "menuButton.h"
 #include "networkMenu.h"
 #include "settingsMenu.h"
+#include "updateManager.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -19,6 +20,15 @@ QWidget* createSystemMenu(QStackedWidget *stack, QWidget *mainMenu)
     // Netzwerk-Button
     QPushButton *btnUpdateSystem = createMenuButton(QObject::tr("Update System"));
 	layout->addWidget(btnUpdateSystem);
+
+	// UpdateManager erzeugen
+	UpdateManager* updater = new UpdateManager(menu);
+
+	QObject::connect(btnUpdateSystem, &QPushButton::clicked, [=]() {
+		updater->checkForUpdates();
+	});
+
+
 
     // Netzwerk-Button
     btnNetwork = createMenuButton(QObject::tr("Netzwerk"));

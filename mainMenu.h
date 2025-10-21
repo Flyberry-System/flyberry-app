@@ -6,6 +6,7 @@
 #include <QApplication>
 #include "menuButton.h"
 #include <QProcess>
+#include <QScreen>
 #include <QVBoxLayout>
 #include "languageHelper.h"
 

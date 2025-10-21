@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Qt finden (Qt6 bevorzugt, sonst Qt5)
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools)
+find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools Network)
 
 
 
@@ -33,6 +33,8 @@ add_executable(FlyberryApp
     statusBar.cpp
     mainMenu.cpp
     languageHelper.cpp
+    updateManager.cpp
+    networkManager.cpp
 )
 
 # Linken
@@ -43,6 +45,7 @@ target_link_libraries(
 	Qt${QT_VERSION_MAJOR}::Svg 
 	Qt${QT_VERSION_MAJOR}::Core
 	Qt${QT_VERSION_MAJOR}::Gui 
+	Qt${QT_VERSION_MAJOR}::Network
 )
 
 # Pfad zu den Qt6-Translations auf dem System
