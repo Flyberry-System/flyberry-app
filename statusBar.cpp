@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QTime>
+#include <QFile>
 
 StatusBar::StatusBar(QWidget *parent) : QFrame(parent)
 {
@@ -45,10 +46,21 @@ StatusBar::StatusBar(QWidget *parent) : QFrame(parent)
 
 void StatusBar::updateStatus()
 {
-    // Uhrzeit aktualisieren
+    // --- Uhrzeit aktualisieren ---
     timeLabel->setText(QTime::currentTime().toString("HH:mm:ss"));
 
-    // Platzhalter für WLAN und Spannung -> später echte Werte
-    double voltage = 12.34;
+    // --- Spannung aus /sys/class/hwmon/hwmon2/in1_input lesen ---
+    double voltage = 0.0;
+    QFile file("/sys/class/hwmon/hwmon2/in1_input");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QString line = in.readLine();
+        voltage = line.toDouble() / 1000.0;  // Sysfs liefert mV, wir wollen V
+        file.close();
+    } else {
+        qWarning() << "Kann /sys/class/hwmon/hwmon2/in1_input nicht lesen!";
+    }
+
+    // --- Spannungsanzeige aktualisieren ---
     voltageLabel->setText(QString("%1 V").arg(voltage, 0, 'f', 1));
 }
