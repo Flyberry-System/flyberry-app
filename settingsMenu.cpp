@@ -20,7 +20,6 @@ static int readSysfsValue(const QString &path, int defaultValue = 10) {
 }
 
 
-// Rotation-Dialog
 
 QDialog* createRotationDialog(QWidget *parent = nullptr) {
     QDialog *dialog = new QDialog(parent);
@@ -50,23 +49,36 @@ QDialog* createRotationDialog(QWidget *parent = nullptr) {
     auto saveAndClose = [=]() {
         int rotationValue = combo->currentData().toInt();
 
-        QFile configFile("/boot/config.uEnv");
-        if (configFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QString content = configFile.readAll();
-            configFile.close();
+        // 1️⃣ /boot/cmdline.txt anpassen
+        QString cmdlinePath = "/boot/cmdline.txt";
+        QFile cmdlineFile(cmdlinePath);
+        if (cmdlineFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QString content = cmdlineFile.readAll();
+            cmdlineFile.close();
 
-            QRegularExpression rx("^rotation=.*$");
-            content.replace(rx, QString("rotation=%1").arg(rotationValue));
-
-            if (configFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
-                QTextStream out(&configFile);
-                out << content;
-                configFile.close();
+            QRegularExpression rx("fbcon=rotate:\\d+");
+            if (content.contains(rx)) {
+                content.replace(rx, QString("fbcon=rotate:%1").arg(rotationValue));
             } else {
-                qWarning() << "Konnte /boot/config.uEnv nicht schreiben";
+                // Falls nicht vorhanden, ans Ende anhängen
+                if (!content.endsWith('\n'))
+                    content.append(' ');
+                content.append(QString("fbcon=rotate:%1").arg(rotationValue));
             }
+
+            if (cmdlineFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+                QTextStream out(&cmdlineFile);
+                out << content.trimmed();
+                cmdlineFile.close();
+                qDebug() << "cmdline.txt aktualisiert: fbcon=rotate:" << rotationValue;
+            } else {
+                qWarning() << "Konnte /boot/cmdline.txt nicht schreiben";
+            }
+        } else {
+            qWarning() << "Konnte /boot/cmdline.txt nicht lesen";
         }
 
+        // 2️⃣ Sofortige Wirkung für Framebuffer
         QFile fbconFile("/sys/class/graphics/fbcon/rotate_all");
         if (fbconFile.open(QIODevice::WriteOnly)) {
             QTextStream out(&fbconFile);
@@ -76,17 +88,36 @@ QDialog* createRotationDialog(QWidget *parent = nullptr) {
             qWarning() << "Konnte /sys/class/graphics/fbcon/rotate_all nicht schreiben";
         }
 
+        // 3️⃣ Rotation in X11 über xrandr anwenden (optional, falls Desktop aktiv)
+        QString rotationName;
+        switch (rotationValue) {
+            case 0: rotationName = "normal"; break;
+            case 1: rotationName = "left"; break;
+            case 2: rotationName = "inverted"; break;
+            case 3: rotationName = "right"; break;
+        }
+
+        QString cmd = QString("xrandr --output $(xrandr | grep ' connected' | cut -d ' ' -f1) --rotate %1")
+                      .arg(rotationName);
+        QProcess::startDetached("sh", QStringList() << "-c" << cmd);
+
+        // Rotation speichern
+        QFile rotFile("/data/rotation.conf");
+        if (rotFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+            QTextStream out(&rotFile);
+            out << "ROTATE=" << rotationName << "\n";
+            rotFile.close();
+        }
+
         dialog->accept();
     };
 
     QObject::connect(btnOk, &QPushButton::clicked, saveAndClose);
-    // nach Erstellen von combo und dialog:
-    auto *filter = new EnterEventFilter(saveAndClose, dialog);
 
-    // Filter auf Dialog und ComboBox setzen
+    // ENTER-Key-Event-Filter optional
+    auto *filter = new EnterEventFilter(saveAndClose, dialog);
     dialog->installEventFilter(filter);
     combo->installEventFilter(filter);
-
 
     dialog->setLayout(layout);
     return dialog;

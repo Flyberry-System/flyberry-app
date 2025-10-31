@@ -9,6 +9,7 @@
 #include <QScreen>
 #include <QVBoxLayout>
 #include "languageHelper.h"
+#include "confirmDialog.h"
 
 class MainMenu : public QWidget {
     Q_OBJECT

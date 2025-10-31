@@ -3,6 +3,7 @@
 #include <QJsonObject>
 #include <QFileInfo>
 #include <QDebug>
+#include <QTcpSocket>
 
 UpdateManager::UpdateManager(QObject *parent)
     : QObject(parent), manager(new QNetworkAccessManager(this))
@@ -17,6 +18,15 @@ void UpdateManager::checkForUpdates()
     QNetworkRequest request(url);
     manager->get(request);
 }
+
+
+bool UpdateManager::checkServerReachable(const QString &host, quint16 port, int timeoutMs = 1000)
+{
+    QTcpSocket socket;
+    socket.connectToHost(host, port);
+    return socket.waitForConnected(timeoutMs);
+}
+
 
 void UpdateManager::onCheckReply(QNetworkReply *reply)
 {

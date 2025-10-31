@@ -16,7 +16,7 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
     layout->setContentsMargins(15,15,15,15);
 
     btnXCSoar   = createMenuButton(tr("Starte XCSoar"));
-    btnSystem   = createMenuButton(tr("System"), true);
+    btnSystem   = createMenuButton(tr("System") );
     btnShell    = createMenuButton(tr("Shell"));
     btnReboot   = createMenuButton(tr("Neustart"));
     btnShutdown = createMenuButton(tr("Ausschalten"));
@@ -50,12 +50,25 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
         QProcess::startDetached("/usr/bin/matchbox-terminal");
     });
 
-    QObject::connect(btnReboot, &QPushButton::clicked, []() {
-        QProcess::startDetached("reboot");
+//    QObject::connect(btnReboot, &QPushButton::clicked, []() {
+//        QProcess::startDetached("reboot");
+//    });
+//
+//    QObject::connect(btnShutdown, &QPushButton::clicked, []() {
+//        QProcess::startDetached("poweroff");
+//    });
+
+
+    QObject::connect(btnReboot, &QPushButton::clicked, [=]() {
+        ConfirmDialog dlg("Möchtest du das System wirklich neu starten?");
+        if (dlg.exec() == QDialog::Accepted)
+            QProcess::startDetached("reboot");
     });
 
-    QObject::connect(btnShutdown, &QPushButton::clicked, []() {
-        QProcess::startDetached("poweroff");
+    QObject::connect(btnShutdown, &QPushButton::clicked, [=]() {
+        ConfirmDialog dlg("Möchtest du das System wirklich ausschalten?");
+        if (dlg.exec() == QDialog::Accepted)
+            QProcess::startDetached("poweroff");
     });
 
     // Language update

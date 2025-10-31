@@ -35,6 +35,9 @@ add_executable(FlyberryApp
     languageHelper.cpp
     updateManager.cpp
     networkManager.cpp
+    updateMenu.cpp
+    statusDialog.cpp
+    confirmDialog.cpp
 )
 
 # Linken

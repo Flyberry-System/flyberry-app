@@ -1,2 +1,2 @@
-set(__QT_DEPLOY_TARGET_QtButtonsApp_FILE /home/markus/flyberry-app/build/default/QtButtonsApp)
-set(__QT_DEPLOY_TARGET_QtButtonsApp_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_FlyberryApp_FILE /home/markus/flyberry-app/build/default/FlyberryApp)
+set(__QT_DEPLOY_TARGET_FlyberryApp_TYPE EXECUTABLE)

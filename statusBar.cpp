@@ -51,14 +51,14 @@ void StatusBar::updateStatus()
 
     // --- Spannung aus /sys/class/hwmon/hwmon2/in1_input lesen ---
     double voltage = 0.0;
-    QFile file("/sys/class/hwmon/hwmon2/in1_input");
+    QFile file("/sys/class/hwmon/hwmon1/in1_input");
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
         QString line = in.readLine();
         voltage = line.toDouble() / 1000.0;  // Sysfs liefert mV, wir wollen V
         file.close();
     } else {
-        qWarning() << "Kann /sys/class/hwmon/hwmon2/in1_input nicht lesen!";
+        qWarning() << "Kann /sys/class/hwmon/hwmon1/in1_input nicht lesen!";
     }
 
     // --- Spannungsanzeige aktualisieren ---

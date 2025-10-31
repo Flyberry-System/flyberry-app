@@ -85,6 +85,51 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles /home/markus/flyberry-app/build/cmake.debug.linux.x86_64//CMakeFiles/progress.marks
@@ -117,24 +162,50 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named QtButtonsApp
+# Target rules for targets named FlyberryApp
 
 # Build rule for target.
-QtButtonsApp: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 QtButtonsApp
-.PHONY : QtButtonsApp
+FlyberryApp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FlyberryApp
+.PHONY : FlyberryApp
 
 # fast build rule for target.
-QtButtonsApp/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/build
-.PHONY : QtButtonsApp/fast
+FlyberryApp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/build
+.PHONY : FlyberryApp/fast
+
+#=============================================================================
+# Target rules for targets named FlyberryApp_autogen_timestamp_deps
+
+# Build rule for target.
+FlyberryApp_autogen_timestamp_deps: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FlyberryApp_autogen_timestamp_deps
+.PHONY : FlyberryApp_autogen_timestamp_deps
+
+# fast build rule for target.
+FlyberryApp_autogen_timestamp_deps/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp_autogen_timestamp_deps.dir/build.make CMakeFiles/FlyberryApp_autogen_timestamp_deps.dir/build
+.PHONY : FlyberryApp_autogen_timestamp_deps/fast
+
+#=============================================================================
+# Target rules for targets named FlyberryApp_autogen
+
+# Build rule for target.
+FlyberryApp_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FlyberryApp_autogen
+.PHONY : FlyberryApp_autogen
+
+# fast build rule for target.
+FlyberryApp_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp_autogen.dir/build.make CMakeFiles/FlyberryApp_autogen.dir/build
+.PHONY : FlyberryApp_autogen/fast
 
 EnterEventFilter.o: EnterEventFilter.cpp.o
 .PHONY : EnterEventFilter.o
 
 # target to build an object file
 EnterEventFilter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/EnterEventFilter.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/EnterEventFilter.cpp.o
 .PHONY : EnterEventFilter.cpp.o
 
 EnterEventFilter.i: EnterEventFilter.cpp.i
@@ -142,7 +213,7 @@ EnterEventFilter.i: EnterEventFilter.cpp.i
 
 # target to preprocess a source file
 EnterEventFilter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/EnterEventFilter.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/EnterEventFilter.cpp.i
 .PHONY : EnterEventFilter.cpp.i
 
 EnterEventFilter.s: EnterEventFilter.cpp.s
@@ -150,15 +221,63 @@ EnterEventFilter.s: EnterEventFilter.cpp.s
 
 # target to generate assembly for a file
 EnterEventFilter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/EnterEventFilter.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/EnterEventFilter.cpp.s
 .PHONY : EnterEventFilter.cpp.s
+
+FlyberryApp_autogen/mocs_compilation.o: FlyberryApp_autogen/mocs_compilation.cpp.o
+.PHONY : FlyberryApp_autogen/mocs_compilation.o
+
+# target to build an object file
+FlyberryApp_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/FlyberryApp_autogen/mocs_compilation.cpp.o
+.PHONY : FlyberryApp_autogen/mocs_compilation.cpp.o
+
+FlyberryApp_autogen/mocs_compilation.i: FlyberryApp_autogen/mocs_compilation.cpp.i
+.PHONY : FlyberryApp_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+FlyberryApp_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/FlyberryApp_autogen/mocs_compilation.cpp.i
+.PHONY : FlyberryApp_autogen/mocs_compilation.cpp.i
+
+FlyberryApp_autogen/mocs_compilation.s: FlyberryApp_autogen/mocs_compilation.cpp.s
+.PHONY : FlyberryApp_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+FlyberryApp_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/FlyberryApp_autogen/mocs_compilation.cpp.s
+.PHONY : FlyberryApp_autogen/mocs_compilation.cpp.s
+
+languageHelper.o: languageHelper.cpp.o
+.PHONY : languageHelper.o
+
+# target to build an object file
+languageHelper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/languageHelper.cpp.o
+.PHONY : languageHelper.cpp.o
+
+languageHelper.i: languageHelper.cpp.i
+.PHONY : languageHelper.i
+
+# target to preprocess a source file
+languageHelper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/languageHelper.cpp.i
+.PHONY : languageHelper.cpp.i
+
+languageHelper.s: languageHelper.cpp.s
+.PHONY : languageHelper.s
+
+# target to generate assembly for a file
+languageHelper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/languageHelper.cpp.s
+.PHONY : languageHelper.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -166,7 +285,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -174,15 +293,39 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+mainMenu.o: mainMenu.cpp.o
+.PHONY : mainMenu.o
+
+# target to build an object file
+mainMenu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/mainMenu.cpp.o
+.PHONY : mainMenu.cpp.o
+
+mainMenu.i: mainMenu.cpp.i
+.PHONY : mainMenu.i
+
+# target to preprocess a source file
+mainMenu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/mainMenu.cpp.i
+.PHONY : mainMenu.cpp.i
+
+mainMenu.s: mainMenu.cpp.s
+.PHONY : mainMenu.s
+
+# target to generate assembly for a file
+mainMenu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/mainMenu.cpp.s
+.PHONY : mainMenu.cpp.s
 
 menuButton.o: menuButton.cpp.o
 .PHONY : menuButton.o
 
 # target to build an object file
 menuButton.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/menuButton.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/menuButton.cpp.o
 .PHONY : menuButton.cpp.o
 
 menuButton.i: menuButton.cpp.i
@@ -190,7 +333,7 @@ menuButton.i: menuButton.cpp.i
 
 # target to preprocess a source file
 menuButton.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/menuButton.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/menuButton.cpp.i
 .PHONY : menuButton.cpp.i
 
 menuButton.s: menuButton.cpp.s
@@ -198,15 +341,39 @@ menuButton.s: menuButton.cpp.s
 
 # target to generate assembly for a file
 menuButton.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/menuButton.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/menuButton.cpp.s
 .PHONY : menuButton.cpp.s
+
+networkManager.o: networkManager.cpp.o
+.PHONY : networkManager.o
+
+# target to build an object file
+networkManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkManager.cpp.o
+.PHONY : networkManager.cpp.o
+
+networkManager.i: networkManager.cpp.i
+.PHONY : networkManager.i
+
+# target to preprocess a source file
+networkManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkManager.cpp.i
+.PHONY : networkManager.cpp.i
+
+networkManager.s: networkManager.cpp.s
+.PHONY : networkManager.s
+
+# target to generate assembly for a file
+networkManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkManager.cpp.s
+.PHONY : networkManager.cpp.s
 
 networkMenu.o: networkMenu.cpp.o
 .PHONY : networkMenu.o
 
 # target to build an object file
 networkMenu.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/networkMenu.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkMenu.cpp.o
 .PHONY : networkMenu.cpp.o
 
 networkMenu.i: networkMenu.cpp.i
@@ -214,7 +381,7 @@ networkMenu.i: networkMenu.cpp.i
 
 # target to preprocess a source file
 networkMenu.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/networkMenu.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkMenu.cpp.i
 .PHONY : networkMenu.cpp.i
 
 networkMenu.s: networkMenu.cpp.s
@@ -222,7 +389,7 @@ networkMenu.s: networkMenu.cpp.s
 
 # target to generate assembly for a file
 networkMenu.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/networkMenu.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/networkMenu.cpp.s
 .PHONY : networkMenu.cpp.s
 
 settingsMenu.o: settingsMenu.cpp.o
@@ -230,7 +397,7 @@ settingsMenu.o: settingsMenu.cpp.o
 
 # target to build an object file
 settingsMenu.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/settingsMenu.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/settingsMenu.cpp.o
 .PHONY : settingsMenu.cpp.o
 
 settingsMenu.i: settingsMenu.cpp.i
@@ -238,7 +405,7 @@ settingsMenu.i: settingsMenu.cpp.i
 
 # target to preprocess a source file
 settingsMenu.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/settingsMenu.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/settingsMenu.cpp.i
 .PHONY : settingsMenu.cpp.i
 
 settingsMenu.s: settingsMenu.cpp.s
@@ -246,15 +413,39 @@ settingsMenu.s: settingsMenu.cpp.s
 
 # target to generate assembly for a file
 settingsMenu.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/settingsMenu.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/settingsMenu.cpp.s
 .PHONY : settingsMenu.cpp.s
+
+statusBar.o: statusBar.cpp.o
+.PHONY : statusBar.o
+
+# target to build an object file
+statusBar.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/statusBar.cpp.o
+.PHONY : statusBar.cpp.o
+
+statusBar.i: statusBar.cpp.i
+.PHONY : statusBar.i
+
+# target to preprocess a source file
+statusBar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/statusBar.cpp.i
+.PHONY : statusBar.cpp.i
+
+statusBar.s: statusBar.cpp.s
+.PHONY : statusBar.s
+
+# target to generate assembly for a file
+statusBar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/statusBar.cpp.s
+.PHONY : statusBar.cpp.s
 
 systemMenu.o: systemMenu.cpp.o
 .PHONY : systemMenu.o
 
 # target to build an object file
 systemMenu.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/systemMenu.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/systemMenu.cpp.o
 .PHONY : systemMenu.cpp.o
 
 systemMenu.i: systemMenu.cpp.i
@@ -262,7 +453,7 @@ systemMenu.i: systemMenu.cpp.i
 
 # target to preprocess a source file
 systemMenu.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/systemMenu.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/systemMenu.cpp.i
 .PHONY : systemMenu.cpp.i
 
 systemMenu.s: systemMenu.cpp.s
@@ -270,8 +461,56 @@ systemMenu.s: systemMenu.cpp.s
 
 # target to generate assembly for a file
 systemMenu.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/QtButtonsApp.dir/build.make CMakeFiles/QtButtonsApp.dir/systemMenu.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/systemMenu.cpp.s
 .PHONY : systemMenu.cpp.s
+
+updateManager.o: updateManager.cpp.o
+.PHONY : updateManager.o
+
+# target to build an object file
+updateManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateManager.cpp.o
+.PHONY : updateManager.cpp.o
+
+updateManager.i: updateManager.cpp.i
+.PHONY : updateManager.i
+
+# target to preprocess a source file
+updateManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateManager.cpp.i
+.PHONY : updateManager.cpp.i
+
+updateManager.s: updateManager.cpp.s
+.PHONY : updateManager.s
+
+# target to generate assembly for a file
+updateManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateManager.cpp.s
+.PHONY : updateManager.cpp.s
+
+updateMenu.o: updateMenu.cpp.o
+.PHONY : updateMenu.o
+
+# target to build an object file
+updateMenu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateMenu.cpp.o
+.PHONY : updateMenu.cpp.o
+
+updateMenu.i: updateMenu.cpp.i
+.PHONY : updateMenu.i
+
+# target to preprocess a source file
+updateMenu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateMenu.cpp.i
+.PHONY : updateMenu.cpp.i
+
+updateMenu.s: updateMenu.cpp.s
+.PHONY : updateMenu.s
+
+# target to generate assembly for a file
+updateMenu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FlyberryApp.dir/build.make CMakeFiles/FlyberryApp.dir/updateMenu.cpp.s
+.PHONY : updateMenu.cpp.s
 
 # Help Target
 help:
@@ -280,26 +519,53 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... QtButtonsApp"
+	@echo "... FlyberryApp_autogen"
+	@echo "... FlyberryApp_autogen_timestamp_deps"
+	@echo "... FlyberryApp"
 	@echo "... EnterEventFilter.o"
 	@echo "... EnterEventFilter.i"
 	@echo "... EnterEventFilter.s"
+	@echo "... FlyberryApp_autogen/mocs_compilation.o"
+	@echo "... FlyberryApp_autogen/mocs_compilation.i"
+	@echo "... FlyberryApp_autogen/mocs_compilation.s"
+	@echo "... languageHelper.o"
+	@echo "... languageHelper.i"
+	@echo "... languageHelper.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mainMenu.o"
+	@echo "... mainMenu.i"
+	@echo "... mainMenu.s"
 	@echo "... menuButton.o"
 	@echo "... menuButton.i"
 	@echo "... menuButton.s"
+	@echo "... networkManager.o"
+	@echo "... networkManager.i"
+	@echo "... networkManager.s"
 	@echo "... networkMenu.o"
 	@echo "... networkMenu.i"
 	@echo "... networkMenu.s"
 	@echo "... settingsMenu.o"
 	@echo "... settingsMenu.i"
 	@echo "... settingsMenu.s"
+	@echo "... statusBar.o"
+	@echo "... statusBar.i"
+	@echo "... statusBar.s"
 	@echo "... systemMenu.o"
 	@echo "... systemMenu.i"
 	@echo "... systemMenu.s"
+	@echo "... updateManager.o"
+	@echo "... updateManager.i"
+	@echo "... updateManager.s"
+	@echo "... updateMenu.o"
+	@echo "... updateMenu.i"
+	@echo "... updateMenu.s"
 .PHONY : help
 
 
