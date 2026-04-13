@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/icons">
-    <file>icons/wifi.svg</file>
-    <file>icons/battery.svg</file>
-  </qresource>
-</RCC>

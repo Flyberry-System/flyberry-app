@@ -1,9 +1,0 @@
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/FlyberryApp.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/edit_cache.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/rebuild_cache.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/list_install_components.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/install.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/install/local.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/install/strip.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/FlyberryApp_autogen_timestamp_deps.dir
-/home/markus/flyberry-app/build/cmake.debug.linux.x86_64/CMakeFiles/FlyberryApp_autogen.dir
