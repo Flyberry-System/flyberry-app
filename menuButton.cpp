@@ -14,13 +14,13 @@ QPushButton* createMenuButton(const QString &text, bool iconRight, QWidget *pare
         QPushButton {
             font-size: 20px;
             text-align: center;
-            background-color: #2E3440;
+            background-color: #374157;
             color: #D8DEE9;
             border: none;
             padding: 10px;
         }
         QPushButton:hover {
-            background-color: #4C566A;
+            background-color: #2e3542;
         }
         QPushButton:pressed {
             background-color: #434C5E;

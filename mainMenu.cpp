@@ -8,7 +8,7 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
 	// --- Scale-Faktor automatisch ermitteln ---
 	QScreen *screen = QGuiApplication::primaryScreen();
 	qreal dpi = screen ? screen->logicalDotsPerInch() : 96.0;
-	qreal scaleFactor = dpi / 96.0;  // 96 DPI = Standard
+	qreal scaleFactor = dpi / 150.0;  // 96 DPI = Standard
 	if (scaleFactor < 1.0) scaleFactor =  1.0; // Minimum
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
@@ -60,13 +60,13 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
 
 
     QObject::connect(btnReboot, &QPushButton::clicked, [=]() {
-        ConfirmDialog dlg("Möchtest du das System wirklich neu starten?");
+        ConfirmDialog dlg("Möchtest du das System wirklich neu starten?", this);
         if (dlg.exec() == QDialog::Accepted)
             QProcess::startDetached("reboot");
     });
 
     QObject::connect(btnShutdown, &QPushButton::clicked, [=]() {
-        ConfirmDialog dlg("Möchtest du das System wirklich ausschalten?");
+        ConfirmDialog dlg("Möchtest du das System wirklich ausschalten?",  this);
         if (dlg.exec() == QDialog::Accepted)
             QProcess::startDetached("poweroff");
     });

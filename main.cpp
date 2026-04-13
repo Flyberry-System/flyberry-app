@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
     // --- Fenster ---
     QWidget window;
     window.setWindowTitle(QObject::tr("Flyberry Menü"));
-    window.setStyleSheet("background-color: #3B4252;");
-    window.showFullScreen();
+    window.setStyleSheet("background-color: #4a556e;");
+   // window.showFullScreen();
 
     QVBoxLayout *windowLayout = new QVBoxLayout(&window);
     windowLayout->setContentsMargins(0,0,0,0);
@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
     MainMenu *mainMenu = new MainMenu(stack, systemMenu);
 
     // "Zurück"-Button verbinden
-    for(QPushButton *b : systemMenu->findChildren<QPushButton*>()) {
+    for(QPushButton *b : systemMenu->findChildren<QPushButton*>()) 
+    {
         if(b->text() == QObject::tr("Zurück")) {
             QObject::connect(b, &QPushButton::clicked, [=]() {
                 stack->setCurrentWidget(mainMenu);

@@ -42,7 +42,7 @@ ConfirmDialog::ConfirmDialog(const QString &message, QWidget *parent)
     QFont f = label->font();
     f.setPointSize(14);
     label->setFont(f);
-    label->setStyleSheet("color: white;");
+    label->setStyleSheet("color: white; background: transparent;");
     layout->addWidget(label);
 
     // --- Button-Reihe ---
@@ -111,4 +111,19 @@ void ConfirmDialog::keyPressEvent(QKeyEvent *event)
         default:
             QDialog::keyPressEvent(event);
     }
+}
+
+void ConfirmDialog::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+
+    QRect targetRect;
+
+    if (parentWidget())
+        targetRect = parentWidget()->geometry();
+    else
+        targetRect = QGuiApplication::primaryScreen()->availableGeometry();
+
+    move(targetRect.center() - rect().center());
+    qDebug() << "showEvent called!";
 }

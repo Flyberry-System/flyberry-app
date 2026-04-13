@@ -11,16 +11,44 @@ NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {}
  */
 void NetworkManager::scanNetworks()
 {
+    QString cmd;
+
+    QFile cpuInfo("/proc/cpuinfo");
+    bool isRaspberryPi = true;
+    if (cpuInfo.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QString content = cpuInfo.readAll();
+        isRaspberryPi = content.contains("BCM"); // typische Pi CPU
+        cpuInfo.close();
+    }
+
+    if (isRaspberryPi) {
+        cmd = "iw wlan0 scan | grep 'SSID:'";
+    } else {
+        cmd = "nmcli -t -f SSID dev wifi";
+    }
+
+  
     QProcess *proc = new QProcess(this);
-    connect(proc, &QProcess::finished, [this, proc](int, QProcess::ExitStatus) {
+    connect(proc, &QProcess::finished, [this, proc, isRaspberryPi](int, QProcess::ExitStatus) {
         QString output = proc->readAllStandardOutput();
-        QStringList ssids = parseIwlistOutput(output);
+        QStringList ssids;
+
+        if (isRaspberryPi) {
+            for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
+                QString ssid = line.section("SSID:", 1).trimmed();
+                if (!ssid.isEmpty())
+                    ssids << ssid;
+            }
+        } else {
+            ssids << "HomeWiFi" << "OfficeNet" << "GuestNetwork" << "TestNetwork";
+           // ssids = output.split('\n', Qt::SkipEmptyParts);
+        }
+
         emit scanFinished(ssids);
         proc->deleteLater();
     });
 
-    // iwlist ist veraltet – nutze 'iw'
-    proc->start("sh", QStringList() << "-c" << "iw wlan0 scan | grep 'SSID:'");
+    proc->start("sh", QStringList() << "-c" << cmd);
 }
 
 /**

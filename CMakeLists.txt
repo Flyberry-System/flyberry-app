@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Qt finden (Qt6 bevorzugt, sonst Qt5)
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools Network)
+find_package(Qt6 6.9 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools Network)
 
 
 

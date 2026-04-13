@@ -1,5 +1,7 @@
 #pragma once
 #include <QDialog>
+#include <QShowEvent>
+#include <QDebug>
 
 class QPushButton;
 class QLabel;
@@ -12,6 +14,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void showEvent(QShowEvent *event) override; 
 
 private:
     QLabel *label;
