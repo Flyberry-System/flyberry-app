@@ -15,11 +15,7 @@ void NetworkManager::scanNetworks()
 
     QFile cpuInfo("/proc/cpuinfo");
     bool isRaspberryPi = true;
-    if (cpuInfo.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString content = cpuInfo.readAll();
-        isRaspberryPi = content.contains("BCM"); // typische Pi CPU
-        cpuInfo.close();
-    }
+   
 
     if (isRaspberryPi) {
         cmd = "iw wlan0 scan | grep 'SSID:'";
