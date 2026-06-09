@@ -1,62 +1,65 @@
 #include "updateMenu.h"
+
 #include <QVBoxLayout>
 #include <QProcess>
 #include <QLabel>
 #include <QRegularExpression>
-#include <QScrollBar>
+#include <QTimer>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QTextEdit>
 
-UpdateMenu::UpdateMenu(QStackedWidget *stack_, QWidget *systemMenu_, QWidget *parent)
-    : QWidget(parent), stack(stack_), systemMenu(systemMenu_)
+UpdateMenu::UpdateMenu(QStackedWidget *stack_, QWidget *systemMenu_, QWidget *parent) : QWidget(parent), stack(stack_), systemMenu(systemMenu_)
 {
-	QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->setSpacing(5);
-	layout->setContentsMargins(5, 5, 5, 5);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setSpacing(5);
+    layout->setContentsMargins(5, 5, 5, 5);
 
-	QLabel *title = new QLabel(tr("System-Update"));
-	title->setStyleSheet("font-size: 20px; font-weight: bold;");
-	layout->addWidget(title);
+    QLabel *title = new QLabel(tr("System-Update"));
+    title->setStyleSheet("font-size: 20px; font-weight: bold;");
+    layout->addWidget(title);
 
-	lblActiveSlot = new QLabel("Aktiver Slot: –");
-	lblVersion    = new QLabel("Version: –");
-	lblStatus     = new QLabel("Status: –");
-	layout->addWidget(lblActiveSlot);
-	layout->addWidget(lblVersion);
-	layout->addWidget(lblStatus);
+    lblActiveSlot = new QLabel("Aktiver Slot: –");
+    lblVersion    = new QLabel("Version: –");
+    lblStatus     = new QLabel("Status: –");
 
-	QPushButton *btnCheck   = createMenuButton(tr("Nach Update suchen"));
-	btnStartUpdate          = createMenuButton(tr("Update starten"));
-//	btnStartUpdate->setEnabled(false);
+    layout->addWidget(lblActiveSlot);
+    layout->addWidget(lblVersion);
+    layout->addWidget(lblStatus);
+    
+    btnCheck       = createMenuButton(tr("Nach Update suchen"));
+    btnStartUpdate = createMenuButton(tr("Update starten"));
+    btnStartUpdate->setEnabled(false);
 
-	logArea = new QTextEdit();
-	logArea->setReadOnly(true);
-	logArea->setMinimumHeight(200);
+    logArea = new QTextEdit();
+    logArea->setReadOnly(true);
+    logArea->setMinimumHeight(200);
 
-	QPushButton *btnBack = createMenuButton(tr("Zurück"));
+    QPushButton *btnBack = createMenuButton(tr("Zurück"));
 
-	layout->addWidget(btnCheck);
-	layout->addWidget(btnStartUpdate);
-	layout->addWidget(btnBack);
-//	layout->addWidget(logArea);
+    layout->addWidget(btnCheck);
+    layout->addWidget(btnStartUpdate);
+    layout->addWidget(btnBack);
 
-	layout->addStretch();
+    layout->addStretch();
 
-	setLayout(layout);
+    connect(btnCheck, &QPushButton::clicked,
+            this, &UpdateMenu::checkForUpdate);
 
-	connect(btnCheck, &QPushButton::clicked, this, &UpdateMenu::checkForUpdate);
-	connect(btnStartUpdate, &QPushButton::clicked, this, &UpdateMenu::startUpdate);
-	connect(btnBack, &QPushButton::clicked, [=]() {
-		stack->setCurrentWidget(systemMenu);
-	});
+    connect(btnStartUpdate, &QPushButton::clicked,
+            this, &UpdateMenu::startUpdate);
 
-	// Liste aller Buttons speichern für Navigation
-//		buttons = {btnRefresh, btnCheck, btnStartUpdate, btnBack};
+    connect(btnBack, &QPushButton::clicked, [=]() {
+        stack->setCurrentWidget(systemMenu);
+    });
 
-	// Fokus auf den ersten Button setzen
-	if (!buttons.isEmpty())
-		buttons.first()->setFocus();
+    updatemanager = new UpdateManager(this);
 
-	refreshStatus();
-	updatemanager = new UpdateManager(this);
+    refreshStatus();
 }
 
 
@@ -98,22 +101,23 @@ void UpdateMenu::keyPressEvent(QKeyEvent *event)
  */
 void UpdateMenu::refreshStatus()
 {
-    QProcess *proc = new QProcess(this);
-    connect(proc, &QProcess::finished, [=](int, QProcess::ExitStatus) {
+    auto *proc = new QProcess(this);
+    proc->setProgram("rauc");
+    proc->setArguments({"status", "--detailed", "--output-format=json"});
+    proc->setProcessChannelMode(QProcess::MergedChannels);
+
+    connect(proc, &QProcess::finished, this, [=](int, QProcess::ExitStatus) {
         QString output = proc->readAllStandardOutput();
 
-        if (output.isEmpty()) {
-            logArea->append("⚠️ Keine RAUC-Ausgabe erhalten!");
-            proc->deleteLater();
-            return;
-        }
+        if (!output.isEmpty())
+            parseRaucStatus(output);
+        else
+            logArea->append("⚠️ Keine RAUC-Ausgabe erhalten");
 
-        parseRaucStatus(output);
         proc->deleteLater();
     });
 
-    // JSON-Format verwenden
-    proc->start("sh", QStringList() << "-c" << "rauc status --detailed --output-format=json");
+    proc->start();
 }
 
 /**
@@ -155,128 +159,100 @@ void UpdateMenu::parseRaucStatus(const QString &output)
  */
 void UpdateMenu::checkForUpdate()
 {
-	StatusDialog *dlg = new StatusDialog(this);
-	dlg->centerOnParent();
-	dlg->show();
+    StatusDialog *dlg = new StatusDialog(this);
+    dlg->centerOnParent();
+    dlg->show();
 
-	dlg->appendMessage("Prüfe Verbindung zum Update-Server...");
+    dlg->appendMessage("Prüfe Server...");
 
-	bool reachable = updatemanager->checkServerReachable("192.168.178.24", 8000, 1000);
+    if (!updatemanager->checkServerReachable("192.168.178.24", 8000, 1000)) {
+        dlg->appendMessage("❌ Server nicht erreichbar");
+        QTimer::singleShot(1000, dlg, &QDialog::accept);
+        return;
+    }
 
-	if (!reachable) {
-		dlg->appendMessage("Server nicht erreichbar");
-		QTimer::singleShot(1000, dlg, &QDialog::accept);
-		return;
-	}
+    dlg->appendMessage("✅ Server erreichbar");
 
-	dlg->appendMessage("✅ Server erreichbar, prüfe RAUC-Status...");
+    auto *manager = new QNetworkAccessManager(this);
+    QNetworkRequest request(QUrl("http://192.168.178.24:8000/update.raucb"));
 
-	// Prüfen, ob RAUC-Bundle existiert
-	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-	QUrl url("http://192.168.178.24:8000/update-ov-ov-rpi4-64.raucb");
-	QNetworkRequest request(url);
-	QNetworkReply *reply = manager->head(request);
+    QNetworkReply *reply = manager->head(request);
 
-	connect(reply, &QNetworkReply::finished, [=]() {
-		if (reply->error() == QNetworkReply::NoError &&
-			reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
-		{
-			dlg->appendMessage("RAUC-Bundle gefunden");
-			// TODO: Update-Verfügbarkeit prüfen, z.B. aktive Version vs Bundle-Version
-			dlg->appendMessage("\nUpdate verfügbar!");
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        if (reply->error() == QNetworkReply::NoError &&
+            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200)
+        {
+            dlg->appendMessage("Update verfügbar");
+            btnStartUpdate->setEnabled(true);
+        }
+        else {
+            dlg->appendMessage("Kein Update gefunden");
+        }
 
-			QTimer::singleShot(1000, dlg, &QDialog::accept);
-
-		} else {
-			dlg->appendMessage("RAUC-Bundle nicht gefunden!");
-			QTimer::singleShot(1000, dlg, &QDialog::accept);
-		}
-		reply->deleteLater();
-	});
+        QTimer::singleShot(1000, dlg, &QDialog::accept);
+        reply->deleteLater();
+    });
 }
 
 
 void UpdateMenu::startUpdate()
 {
     StatusDialog *dialog = new StatusDialog(this);
-    dialog->appendStatus("🔍 Starte Update-Prozess...");
-    dialog->showProgressBar(true); // Fortschrittsbalken aktivieren
+    dialog->showProgressBar(true);
     dialog->show();
 
-    QString updateFile = "update-ov-ov-rpi4-64.raucb";
-    QString serverUrl = "https://flyberry.de/wp-content/software-update";
-    //	QString serverUrl = "http://192.168.178.24:8000/update-ov-ov-rpi4-64.raucb";
-    QString localPath = "/tmp";
+    QString url = "https://flyberry.de/wp-content/software-update/update-ov-ov-rpi4-64.raucb";
+    QString filePath = "/tmp/update.raucb";
 
-    // 1️⃣ Bundle mit wget herunterladen
-    QProcess *wgetProc = new QProcess(this);
-    connect(wgetProc, &QProcess::readyReadStandardOutput, [=]() {
-        QString output = QString::fromUtf8(wgetProc->readAllStandardOutput());
-        dialog->appendStatus(output);
+    dialog->appendStatus("Download startet...");
+
+    // DOWNLOAD
+    QProcess *wget = new QProcess(this);
+    wget->setProgram("wget");
+    wget->setArguments({url, "-O", filePath});
+
+    connect(wget, &QProcess::readyReadStandardOutput, this, [=]() {
+        dialog->appendStatus(wget->readAllStandardOutput());
     });
 
-    connect(wgetProc, &QProcess::readyReadStandardError, [=]() {
-        QString errorOut = QString::fromUtf8(wgetProc->readAllStandardError());
-        dialog->appendStatus(errorOut);
-
-        // Fortschritt in wget-Ausgabe (BusyBox gibt keine Prozent, daher nur Anzeige)
-    });
-
-    connect(wgetProc, &QProcess::finished, [=](int exitCode, QProcess::ExitStatus) {
-        if (exitCode == 0) {
-            dialog->appendStatus("Download abgeschlossen. Starte Installation...");
-            dialog->setProgress(0);
-
-            // 2️⃣ Installation mit RAUC starten
-            QProcess *raucProc = new QProcess(dialog);
-            connect(raucProc, &QProcess::readyReadStandardOutput, [=]() {
-                QString output = QString::fromUtf8(raucProc->readAllStandardOutput());
-                dialog->appendStatus(output);
-
-                // Fortschritt aus RAUC-Ausgabe extrahieren: z. B. "[ 40%]"
-                QRegularExpression re("\\[\\s*(\\d+)%\\]");
-                QRegularExpressionMatch match = re.match(output);
-                if (match.hasMatch()) {
-                    int percent = match.captured(1).toInt();
-                    dialog->setProgress(percent);
-                }
-            });
-
-            connect(raucProc, &QProcess::readyReadStandardError, [=]() {
-                QString errorOut = QString::fromUtf8(raucProc->readAllStandardError());
-                dialog->appendStatus(errorOut);
-
-                // Auch STDERR nach Fortschritt durchsuchen (RAUC kann hier schreiben)
-                QRegularExpression re("\\[\\s*(\\d+)%\\]");
-                QRegularExpressionMatch match = re.match(errorOut);
-                if (match.hasMatch()) {
-                    int percent = match.captured(1).toInt();
-                    dialog->setProgress(percent);
-                }
-            });
-
-            connect(raucProc, &QProcess::finished, [=](int raucExit, QProcess::ExitStatus) {
-                if (raucExit == 0) {
-                    dialog->appendStatus("Update erfolgreich installiert! System kann neu gestartet werden.");
-                    dialog->setProgress(100);
-                } else {
-                    dialog->appendStatus("Update fehlgeschlagen.");
-                }
-                QTimer::singleShot(2000, dialog, &QDialog::accept);
-            });
-
-            QString installCmd = QString("rauc install %1/%2").arg(localPath, updateFile);
-            raucProc->start("sh", QStringList() << "-c" << installCmd);
-        } else {
-            dialog->appendStatus("Download fehlgeschlagen.");
-            QTimer::singleShot(2000, dialog, &QDialog::accept);
+    connect(wget, &QProcess::finished, this, [=](int code) {
+        if (code != 0) {
+            dialog->appendStatus("❌ Download fehlgeschlagen");
+            dialog->close();
+            return;
         }
 
-        wgetProc->deleteLater();
+        dialog->appendStatus("Download fertig. Installiere...");
+
+        // INSTALL
+        QProcess *rauc = new QProcess(this);
+        rauc->setProgram("rauc");
+        rauc->setArguments({"install", filePath});
+
+        static const QRegularExpression re(R"(\[\s*(\d+)%\])");
+
+        connect(rauc, &QProcess::readyReadStandardOutput, this, [=]() {
+            QString out = rauc->readAllStandardOutput();
+            dialog->appendStatus(out);
+
+            auto m = re.match(out);
+            if (m.hasMatch())
+                dialog->setProgress(m.captured(1).toInt());
+        });
+
+        connect(rauc, &QProcess::finished, this, [=](int exitCode) {
+            if (exitCode == 0) {
+                dialog->appendStatus("✔ Update erfolgreich");
+                dialog->setProgress(100);
+            } else {
+                dialog->appendStatus("❌ Update fehlgeschlagen");
+            }
+
+            QTimer::singleShot(2000, dialog, &QDialog::accept);
+        });
+
+        rauc->start();
     });
 
-    // Start des Downloads
-    QString wgetCmd = QString("wget %1/%2 -q -P %3").arg(serverUrl, updateFile, localPath);
-    dialog->appendStatus("Lade Update herunter...");
-    wgetProc->start("sh", QStringList() << "-c" << wgetCmd);
+    wget->start();
 }

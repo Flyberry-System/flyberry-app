@@ -87,17 +87,18 @@ QDialog* createRotationDialog(QWidget *parent = nullptr) {
         } else {
             qWarning() << "Konnte /sys/class/graphics/fbcon/rotate_all nicht schreiben";
         }
-
+        QString cmd = QString("xrandr --auto");
+        QProcess::startDetached("sh", QStringList() << "-c" << cmd);
         // 3️⃣ Rotation in X11 über xrandr anwenden (optional, falls Desktop aktiv)
         QString rotationName;
         switch (rotationValue) {
             case 0: rotationName = "normal"; break;
-            case 1: rotationName = "left"; break;
+            case 1: rotationName = "right"; break;
             case 2: rotationName = "inverted"; break;
-            case 3: rotationName = "right"; break;
+            case 3: rotationName = "left"; break;
         }
 
-        QString cmd = QString("xrandr --output $(xrandr | grep ' connected' | cut -d ' ' -f1) --rotate %1")
+        cmd = QString("xrandr --output $(xrandr | grep ' connected' | cut -d ' ' -f1) --rotate %1")
                       .arg(rotationName);
         QProcess::startDetached("sh", QStringList() << "-c" << cmd);
 

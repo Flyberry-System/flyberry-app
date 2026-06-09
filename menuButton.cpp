@@ -1,55 +1,61 @@
 #include "menuButton.h"
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QApplication>
-#include <QStyle>
+#include <QPushButton>
+#include <QKeyEvent>
+
+class MenuButton : public QPushButton
+{
+public:
+    using QPushButton::QPushButton;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override
+    {
+        if (event->key() == Qt::Key_Return ||
+            event->key() == Qt::Key_Enter ||
+            event->key() == Qt::Key_Space)
+        {
+            click();
+            return;
+        }
+
+        QPushButton::keyPressEvent(event);
+    }
+};
 
 QPushButton* createMenuButton(const QString &text, bool iconRight, QWidget *parent)
 {
-    QPushButton *btn = new QPushButton(parent);
+    MenuButton *btn = new MenuButton(parent);
+
     btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     btn->setMinimumHeight(60);
 
+    btn->setFocusPolicy(Qt::StrongFocus);   // WICHTIG für Keyboard-Navigation
+
     btn->setStyleSheet(R"(
         QPushButton {
-            font-size: 20px;
+            font-size: 22px;
             text-align: center;
-            background-color: #374157;
-            color: #D8DEE9;
-            border: none;
+            background-color: #000000;
+            color: #ffffff;
+            border: 3px solid #e0e0e0;
             padding: 10px;
+            border-radius: 5px;
         }
         QPushButton:hover {
-            background-color: #2e3542;
+            background-color: #b3b2b2;
         }
         QPushButton:pressed {
-            background-color: #434C5E;
+            background-color: #414141;
+        }
+        QPushButton:focus {
+            border: 3px solid #00aaff;
+            background-color: #000000;
+
+            outline: none;
         }
     )");
 
-    if (iconRight) {
-        QHBoxLayout *hLayout = new QHBoxLayout(btn);
-        hLayout->setContentsMargins(12,0,12,0);
-        hLayout->setSpacing(0);
-
-        hLayout->addStretch();
-
-        QLabel *lblText = new QLabel(text, btn);
-        lblText->setAlignment(Qt::AlignCenter);
-        lblText->setStyleSheet("color: #D8DEE9; font-size: 20px;");
-        hLayout->addWidget(lblText, 0, Qt::AlignCenter);
-
-        hLayout->addStretch();
-
-        QLabel *lblIcon = new QLabel(btn);
-        QIcon arrowIcon = QApplication::style()->standardIcon(QStyle::SP_ArrowForward);
-        lblIcon->setPixmap(arrowIcon.pixmap(20,20));
-        hLayout->addWidget(lblIcon, 0, Qt::AlignRight);
-
-        btn->setLayout(hLayout);
-    } else {
-        btn->setText(text);
-    }
+    btn->setText(text);
 
     return btn;
 }

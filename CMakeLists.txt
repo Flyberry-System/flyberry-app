@@ -10,7 +10,7 @@ set(CMAKE_AUTOUIC ON)
 
 # Qt finden (Qt6 bevorzugt, sonst Qt5)
 find_package(Qt6 6.9 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools Network)
-
+find_package(spdlog REQUIRED)
 
 
 # --- Übersetzungen (.ts -> .qm) ---
@@ -38,6 +38,7 @@ add_executable(FlyberryApp
     updateMenu.cpp
     statusDialog.cpp
     confirmDialog.cpp
+    StartupDialog.cpp
 )
 
 # Linken
@@ -49,7 +50,12 @@ target_link_libraries(
 	Qt${QT_VERSION_MAJOR}::Core
 	Qt${QT_VERSION_MAJOR}::Gui 
 	Qt${QT_VERSION_MAJOR}::Network
+
+    spdlog::spdlog
 )
+
+
+
 
 # Pfad zu den Qt6-Translations auf dem System
 set(QT_TRANSLATIONS_DIR "/home/markus/flyberry-app/languages")

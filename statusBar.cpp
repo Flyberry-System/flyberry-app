@@ -8,7 +8,7 @@ StatusBar::StatusBar(QWidget *parent) : QFrame(parent)
 {
     setFrameShape(QFrame::NoFrame);
     setFixedHeight(30);
-    setStyleSheet("background-color: #4C566A; color: #ECEFF4; font-size: 16px;");
+    setStyleSheet("background-color: #3d5d9c; color: #ECEFF4; font-size: 16px;");
 
     wifiIcon = new QLabel(this);
     wifiIcon->setPixmap(QPixmap("icons/wifi.svg").scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));

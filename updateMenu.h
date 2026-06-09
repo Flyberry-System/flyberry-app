@@ -45,6 +45,7 @@ private:
     QLabel *lblStatus;
     QTextEdit *logArea;
     QPushButton *btnStartUpdate;
+    QPushButton *btnCheck;
     QStackedWidget *stack;
     QWidget *systemMenu;
     QVector<QPushButton*> buttons;

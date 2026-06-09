@@ -3,6 +3,7 @@
 #include <QRegularExpression>
 #include <QFile>
 #include <QTextStream>
+#include <spdlog/spdlog.h>
 
 NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {}
 
@@ -13,17 +14,18 @@ void NetworkManager::scanNetworks()
 {
     QString cmd;
 
-    QFile cpuInfo("/proc/cpuinfo");
-    bool isRaspberryPi = true;
-    if (cpuInfo.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString content = cpuInfo.readAll();
-        isRaspberryPi = content.contains("BCM"); // typische Pi CPU
-        cpuInfo.close();
-    }
+    spdlog::info("Network Manager scan networks");
 
-    if (isRaspberryPi) {
+    QFile cpuInfo("/proc/cpuinfo");
+    bool isRaspberryPi = false;
+   
+
+    if (isRaspberryPi) 
+    {
         cmd = "iw wlan0 scan | grep 'SSID:'";
-    } else {
+    } 
+    else 
+    {
         cmd = "nmcli -t -f SSID dev wifi";
     }
 
@@ -33,8 +35,10 @@ void NetworkManager::scanNetworks()
         QString output = proc->readAllStandardOutput();
         QStringList ssids;
 
-        if (isRaspberryPi) {
-            for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
+        if (isRaspberryPi) 
+        {
+            for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) 
+            {
                 QString ssid = line.section("SSID:", 1).trimmed();
                 if (!ssid.isEmpty())
                     ssids << ssid;
@@ -77,43 +81,32 @@ QStringList NetworkManager::parseIwlistOutput(const QString &output)
  */
 void NetworkManager::connectToNetwork(const QString &ssid, const QString &password)
 {
-    emit logMessage("Verbinde mit Netzwerk: " + ssid);
+    spdlog::info("Connecting to network: {}", ssid.toStdString());
 
-    QString confPath = "/data/wpa_supplicant/wpa_supplicant-wlan0.conf";
-    QFile file(confPath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        emit connectionStatus("Fehler: Kann /data/wpa_supplicant.conf nicht schreiben", false);
-        return;
-    }
-
-    QTextStream out(&file);
-    out << "ctrl_interface=/var/run/wpa_supplicant\n";
-    out << "update_config=1\n";
-    out << "country=DE\n\n";
-    out << "network={\n";
-    out << "    ssid=\"" << ssid << "\"\n";
-    out << "    psk=\"" << password << "\"\n";
-    out << "    key_mgmt=WPA-PSK\n";
-    out << "}\n";
-    file.close();
-
-    // Dienst neu starten, um Konfiguration zu übernehmen
     QProcess *proc = new QProcess(this);
-    connect(proc, &QProcess::finished, [this, proc](int exitCode, QProcess::ExitStatus) {
+
+    connect(proc, &QProcess::finished,
+            [this, proc](int exitCode, QProcess::ExitStatus) {
+
+        QString output = proc->readAllStandardOutput();
+        QString error  = proc->readAllStandardError();
+
         bool success = (exitCode == 0);
-        QString msg = success ? "Mit WLAN verbunden (oder Verbindung wird aufgebaut)." : "Verbindung fehlgeschlagen.";
-        emit connectionStatus(msg, success);
 
         if (success) {
-            QProcess::execute("dhclient wlan0");
+            spdlog::info("nmcli success: {}", output.toStdString());
+            emit connectionStatus("Mit WLAN verbunden.", true);
+        } else {
+            spdlog::error("nmcli failed: {}", error.toStdString());
+            emit connectionStatus("Verbindung fehlgeschlagen.", false);
         }
 
         proc->deleteLater();
     });
 
-    // Versuche über systemd neu zu starten, sonst manuell
-    proc->start("sh", QStringList() << "-c" <<
-        "systemctl restart wpa_supplicant || "
-        "(killall wpa_supplicant; "
-        "wpa_supplicant -B -i wlan0 -c /data/wpa_supplicant/wpa_supplicant-wlan0.conf)");
+    // nmcli Befehl
+    QStringList args;
+    args << "dev" << "wifi" << "connect" << ssid << "password" << password;
+
+    proc->start("nmcli", args);
 }
