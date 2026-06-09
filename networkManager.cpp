@@ -16,6 +16,7 @@ void NetworkManager::scanNetworks()
 
     spdlog::info("Network Manager scan networks");
 
+
     QFile cpuInfo("/proc/cpuinfo");
     bool isRaspberryPi = false;
    
