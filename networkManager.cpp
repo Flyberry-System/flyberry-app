@@ -36,18 +36,13 @@ void NetworkManager::scanNetworks()
         QString output = proc->readAllStandardOutput();
         QStringList ssids;
 
-        if (isRaspberryPi) 
+        for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) 
         {
-            for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) 
-            {
-                QString ssid = line.section("SSID:", 1).trimmed();
-                if (!ssid.isEmpty())
-                    ssids << ssid;
-            }
-        } else {
-            ssids << "HomeWiFi" << "OfficeNet" << "GuestNetwork" << "TestNetwork";
-           // ssids = output.split('\n', Qt::SkipEmptyParts);
+            QString ssid = line.section("SSID:", 1).trimmed();
+            if (!ssid.isEmpty())
+                ssids << ssid;
         }
+    
 
         emit scanFinished(ssids);
         proc->deleteLater();
