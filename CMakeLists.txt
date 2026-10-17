@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
+
 project(FlyberryApp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -8,21 +9,17 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Qt finden (Qt6 bevorzugt, sonst Qt5)
-find_package(Qt6 6.9 REQUIRED COMPONENTS Core Gui Widgets  Svg LinguistTools Network)
-find_package(spdlog REQUIRED)
-
-
-# --- Übersetzungen (.ts -> .qm) ---
-set(TS_FILES
-    languages/flyberry_de.ts
-    languages/flyberry_en.ts
+find_package(Qt6 REQUIRED COMPONENTS
+    Core
+    Gui
+    Widgets
+    Svg
+    Network
+    LinguistTools
 )
 
-qt_add_translation(QM_FILES ${TS_FILES})
+find_package(spdlog REQUIRED)
 
-
-# Executable zuerst definieren
 add_executable(FlyberryApp
     main.cpp
     networkMenu.cpp
@@ -41,38 +38,42 @@ add_executable(FlyberryApp
     StartupDialog.cpp
 )
 
-# Linken
-target_link_libraries(
-	FlyberryApp PRIVATE 
-	
-	Qt${QT_VERSION_MAJOR}::Widgets 
-	Qt${QT_VERSION_MAJOR}::Svg 
-	Qt${QT_VERSION_MAJOR}::Core
-	Qt${QT_VERSION_MAJOR}::Gui 
-	Qt${QT_VERSION_MAJOR}::Network
-
+target_link_libraries(FlyberryApp PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Svg
+    Qt6::Network
     spdlog::spdlog
 )
 
+#
+# Übersetzungen
+#
+set(TS_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/languages/flyberry_de.ts
+    ${CMAKE_CURRENT_SOURCE_DIR}/languages/flyberry_en.ts
+)
+
+qt_add_translations(FlyberryApp
+    TS_FILES ${TS_FILES}
+)
 
 
+target_compile_definitions(FlyberryApp PRIVATE
+    QT_TRANSLATIONS_DIR="/usr/translations"
+)
 
-# Pfad zu den Qt6-Translations auf dem System
-set(QT_TRANSLATIONS_DIR "/home/markus/flyberry-app/languages")
+#
+# Installation
+#
+install(TARGETS FlyberryApp
+    RUNTIME DESTINATION bin
+)
 
-# Definiere den Pfad als Preprocessor-Makro für C++
-add_definitions(-DQT_TRANSLATIONS_DIR="${QT_TRANSLATIONS_DIR}")
-
-# --- Installation (optional) ---
-
-install(TARGETS FlyberryApp DESTINATION bin)
-install(FILES ${QM_FILES} DESTINATION translations)
-
-
-
-
-
-
-
-
-
+install(
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/languages/flyberry_de.qm
+        ${CMAKE_CURRENT_SOURCE_DIR}/languages/flyberry_en.qm
+    DESTINATION translations
+)

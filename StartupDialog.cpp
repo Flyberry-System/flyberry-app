@@ -74,8 +74,7 @@ void StartupDialog::tick()
 void StartupDialog::startApp()
 {
     timer->stop();
-
-    QProcess::startDetached("xcsoar");
+    QProcess::startDetached("xcsoar", QStringList() << "-fly");
 
     close();
 }
