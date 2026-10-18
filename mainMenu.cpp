@@ -39,7 +39,7 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
 
     // Aktionen
     QObject::connect(btnXCSoar, &QPushButton::clicked, [=]() {
-        QProcess::startDetached("/usr/bin/xcsoar", QStringList() << "-fly" << "-fullscreen");
+        QProcess::startDetached("/usr/bin/xcsoar", QStringList() << "-fly");
     });
 
     QObject::connect(btnSystem, &QPushButton::clicked, [=]() {
@@ -47,16 +47,16 @@ MainMenu::MainMenu(QStackedWidget* stack_, QWidget* systemMenu_, QWidget* parent
     });
 
     QObject::connect(btnShell, &QPushButton::clicked, [=]() {
-        QProcess::startDetached("/usr/bin/matchbox-terminal");
+        QProcess::startDetached("/usr/bin/weston-terminal");
     });
 
-//    QObject::connect(btnReboot, &QPushButton::clicked, []() {
-//        QProcess::startDetached("reboot");
-//    });
-//
-//    QObject::connect(btnShutdown, &QPushButton::clicked, []() {
-//        QProcess::startDetached("poweroff");
-//    });
+    QObject::connect(btnReboot, &QPushButton::clicked, []() {
+        QProcess::startDetached("reboot");
+    });
+
+    QObject::connect(btnShutdown, &QPushButton::clicked, []() {
+        QProcess::startDetached("poweroff");
+    });
 
 
     QObject::connect(btnReboot, &QPushButton::clicked, [=]() {
